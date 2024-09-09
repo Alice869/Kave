@@ -97,4 +97,69 @@ button2.MouseButton1Click:Connect(function()
     loadstring(game:HttpGet("https://pastebin.com/7Pg9X0zd"))()
 end)
 
-loadstring(game:HttpGet("https://pastebin.com/raw/ypY1Tczb"))()
+local playerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+local screenGu = Instance.new("ScreenGui")
+screenGu.Parent = playerGui
+
+-- Create ImageButton
+local imageButton = Instance.new("ImageButton")
+imageButton.Parent = screenGu
+imageButton.Size = UDim2.new(0, 45, 0, 45) -- Square-shaped (10% of screen width & height)
+imageButton.Position = UDim2.new(0.5, 0, 0.02, 0) -- Positioned near the top center
+imageButton.AnchorPoint = Vector2.new(0.5, 0) -- Set anchor point for position
+imageButton.Image = "rbxassetid://77583396677866"
+imageButton.BackgroundTransparency = 1
+Draggable = true
+
+-- Round the corners of the ImageButton
+local uiCorner = Instance.new("UICorner")
+uiCorner.CornerRadius = UDim.new(0.25, 0) -- This makes the button have rounded corners
+uiCorner.Parent = imageButton
+
+-- Dragging functionality (works for mobile and PC)
+local UIS = game:GetService("UserInputService")
+local dragging = false
+local dragInput
+local dragStart
+local startPos
+
+-- Function to update button's position while dragging
+local function update(input)
+    local delta = input.Position - dragStart
+    imageButton.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+end
+
+-- Handle input began event
+imageButton.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+        dragStart = input.Position
+        startPos = imageButton.Position
+        
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
+end)
+
+-- Handle input changed event
+imageButton.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+        dragInput = input
+    end
+end)
+
+-- Handle input change (while dragging)
+UIS.InputChanged:Connect(function(input)
+    if input == dragInput and dragging then
+        update(input)
+    end
+end)
+
+-- Button functionality to toggle the OTHER UI
+imageButton.MouseButton1Click:Connect(function()
+    screenGui.Enabled = not screenGui.Enabled
+end)
