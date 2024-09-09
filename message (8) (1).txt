@@ -1,0 +1,100 @@
+-- Notification function
+local function showNotification(title, text, icon, duration)
+    game.StarterGui:SetCore("SendNotification", {
+        Title = title;
+        Text = text;
+        Icon = icon;
+        Duration = duration;
+    })
+end
+
+-- Show initial notifications
+showNotification("Sonic Hub", "Sonic Hub is Loading", "rbxassetid://13353892454", 9)
+wait(3)
+showNotification("Sonic Hub", "Sonic Hub has Injected!", "rbxassetid://13353892454", 9)
+wait(0.1)
+showNotification("Option", "Please choose an option", "rbxassetid://13353892454", 9)
+wait(2)
+
+-- Create GUI buttons with gradient background
+local player = game.Players.LocalPlayer
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = player:WaitForChild("PlayerGui")
+
+local buttons = {}  -- Table to keep track of buttons
+
+local function createButton(name, text, position)
+    local buttonFrame = Instance.new("Frame")
+    buttonFrame.Size = UDim2.new(0, 200, 0, 50)
+    buttonFrame.Position = position
+    buttonFrame.BackgroundTransparency = 1
+    buttonFrame.Parent = screenGui
+
+    -- Create the gradient background
+    local gradientFrame = Instance.new("Frame")
+    gradientFrame.Size = UDim2.new(1, 0, 1, 0)
+    gradientFrame.BackgroundTransparency = 1
+    gradientFrame.Parent = buttonFrame
+
+    local gradient = Instance.new("UIGradient")
+    gradient.Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 0, 255)),  -- Start color
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 255, 255))   -- End color
+    })
+    gradient.Parent = gradientFrame
+
+    local corner = Instance.new("UICorner")
+    corner.Parent = gradientFrame
+
+    -- Create the button text
+    local button = Instance.new("TextButton")
+    button.Name = name
+    button.Text = text
+    button.Size = UDim2.new(1, 0, 1, 0)  -- Size to fit the frame
+    button.BackgroundTransparency = 1  -- Transparent background
+    button.TextColor3 = Color3.fromRGB(255, 255, 255)  -- Text color
+    button.Font = Enum.Font.IndieFlower  -- Set the font to IndieFlower
+    button.TextSize = 36  -- Adjust text size as needed
+    button.Parent = buttonFrame
+
+    table.insert(buttons, button)  -- Add the button to the table
+
+    return button
+end
+
+local function destroyAllButtons()
+    for _, btn in pairs(buttons) do
+        btn:Destroy()
+    end
+    buttons = {}  -- Clear the buttons table
+end
+
+local function onSonicHubMovesetClick()
+    -- Create three new buttons with gradient background
+    createButton("SaitamaToSonic", "Saitama To Sonic The Hedgehog", UDim2.new(0.5, -100, 0.5, -150))
+    createButton("SaitamaToShadow", "Saitama To Shadow The Hedgehog", UDim2.new(0.5, -100, 0.5, -80))
+    createButton("SaitamaToSilver", "Saitama To Silver The Hedgehog (W.I.P)", UDim2.new(0.5, -100, 0.5, -10))
+end
+
+local function onButtonClick(buttonName)
+    print(buttonName .. " button clicked")
+    destroyAllButtons()
+end
+
+-- Create initial buttons with gradient background
+local button1 = createButton("SonicHubMoveset", "Sonic Hub Moveset", UDim2.new(0.5, -100, 0.5, -60))
+local button2 = createButton("FullSonicHub", "Full Sonic Hub", UDim2.new(0.5, -100, 0.5, 10))
+
+-- Connect button click handlers
+button1.MouseButton1Click:Connect(function()
+    onButtonClick("SonicHubMoveset")
+    onSonicHubMovesetClick()
+end)
+
+button2.MouseButton1Click:Connect(function()
+    onButtonClick("FullSonicHub")
+    -- Load external script for Full Sonic Hub
+    loadstring(game:HttpGet("https://pastebin.com/7Pg9X0zd"))()
+end)
+
+loadstring(game:HttpGet("https://pastebin.com/raw/ypY1Tczb"))()
