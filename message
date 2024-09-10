@@ -97,6 +97,7 @@ button2.MouseButton1Click:Connect(function()
     loadstring(game:HttpGet("https://pastebin.com/7Pg9X0zd"))()
 end)
 
+task.spawn(function()
 local playerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
 local screenGu = Instance.new("ScreenGui")
@@ -162,4 +163,5 @@ end)
 -- Button functionality to toggle the OTHER UI
 imageButton.MouseButton1Click:Connect(function()
     screenGui.Enabled = not screenGui.Enabled
+end)
 end)
